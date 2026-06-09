@@ -1,0 +1,10 @@
+# World Cup 2026 prediction-market model — Python dependencies
+# Python 3.9+ recommended.  Install:  pip install -r requirements.txt
+#
+# Core (pipeline + simulation). Everything else used (urllib, json, re, math,
+# dataclasses, collections) is the Python standard library.
+numpy>=1.24
+scipy>=1.10
+
+# Visualization (only needed to regenerate assets/results.png via make_figure.py).
+matplotlib>=3.7

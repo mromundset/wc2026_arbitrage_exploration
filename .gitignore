@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local agent working files (project memory, session config) — not for publication
+.claude/
+
+# Internal research log / AI-session brief — kept locally, not published.
+# (The README is the public-facing write-up. Remove this line to publish CLAUDE.md.)
+CLAUDE.md
