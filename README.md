@@ -1,15 +1,14 @@
-# World Cup 2026 — Prediction-Market Mispricing Study
+# World Cup 2026: Prediction-Market Mispricing Study
 
 **Can a structural model of the group stage find mispricings in Polymarket's
-directly-priced aggregate markets? Short answer: no — and proving *why not* is the
-interesting part.**
+directly-priced aggregate markets?**
 
 This repo propagates Polymarket's liquid **match-level** odds through the full 2026 World
 Cup group structure, derives aggregate probabilities (advance-to-knockout, group winner),
 and tests them against the market's *own* aggregate prices and against external
 sportsbooks. It ends in a clean, well-falsified **negative result**, and the discipline
-used to get there — refusing to trust a model calibrated on the very market it benchmarks
-against — is the point.
+used to get there - refusing to trust a model calibrated on the very market it benchmarks
+against - is the point.
 
 ![Headline result](assets/results.png)
 
@@ -17,7 +16,7 @@ against — is the point.
 > three-venue comparison showed those flags were a **modeling artifact** (the model is
 > Polymarket's own view, amplified ~5pp by an independence assumption). The genuine,
 > model-free divergence was between Polymarket and a *recreational* book (DraftKings).
-> The tie-breaker — **Pinnacle**, the sharpest book in the world — sits on top of
+> The tie-breaker - **Pinnacle**, the sharpest book in the world - sits on top of
 > Polymarket (**mean 1.6pp**) and 7.7pp away from DraftKings. **Polymarket's advance
 > market is at fair value; there is no edge, and DraftKings carries the textbook
 > favourite-longshot bias.**
@@ -28,18 +27,18 @@ against — is the point.
 
 Prediction markets are widely sharp on single match outcomes. The working hypothesis was
 that they might be *softer* on **long-range aggregates** (advancing from a group, winning
-a group) — markets a casual crowd prices with sentiment and favourite-longshot bias. If
+a group) - markets a casual crowd prices with sentiment and favourite-longshot bias. If
 so, the match markets and the aggregate markets would be mutually *inconsistent*, and the
 gap would be tradeable.
 
-## Data — single-source design
+## Data - single-source design
 
 All inputs come from one place: **Polymarket's Gamma API** (`gamma-api.polymarket.com`, no
 key). The design deliberately uses a *single source* for the model so any disagreement is
 internal and interpretable:
 
-- **72 group fixtures** — moneyline (1X2) + Over/Under 2.5 goals per match.
-- **Aggregate markets** — *advance to knockout* (48 binaries), *group winner* (12 events).
+- **72 group fixtures**: moneyline (1X2) + Over/Under 2.5 goals per match.
+- **Aggregate markets**: *advance to knockout* (48 binaries), *group winner* (12 events).
 
 External sportsbook odds (DraftKings, Pinnacle) are introduced **only** at the validation
 stage, as independent second/third prices.
@@ -47,7 +46,7 @@ stage, as independent second/third prices.
 ## Statistical method
 
 ```
-match 1X2  ──devig──▶  P(home/draw/away)
+match 1X2   ──devig──▶  P(home/draw/away)
             ──fit────▶  bivariate-Poisson goal rates (λ₁, λ₂, λ₃ shared)   ◀── + P(over 2.5)
             ──simulate▶  joint Monte-Carlo of all 12 groups (50k draws)
             ──rank────▶  top-2 auto + 8 best 3rd-place ⇒ 32 of 48 advance
@@ -80,15 +79,15 @@ match 1X2  ──devig──▶  P(home/draw/away)
 ## Results
 
 **The match→aggregate propagation is internally coherent.** The model reproduces
-Polymarket's own group-winner market to ~1–2 points, and `Σ P(advance) = 32` exactly — so
+Polymarket's own group-winner market to ~1–2 points, and `Σ P(advance) = 32` exactly - so
 there is no easy *internal* arbitrage between the match and aggregate layers.
 
 **The five "flags" were a modeling artifact.** Against Polymarket the model flagged Saudi
 Arabia, Croatia, Canada, Qatar and Ivory Coast. But `|model − Polymarket|` was a
-near-constant **~5pp**, always in the favourite-longshot direction — the fingerprint of
+near-constant **~5pp**, always in the favourite-longshot direction - the fingerprint of
 the independence assumption (treating a team's three correlated group games as
 independent inflates favourites' survival). The model doesn't *discover* anything; it
-amplifies Polymarket. The noise band cannot catch this — it sees input noise, not
+amplifies Polymarket. The noise band cannot catch this - it sees input noise, not
 model-specification error. **A third price can.**
 
 **The three-venue extremeness ordering** `MODEL > POLYMARKET > DRAFTKINGS` revealed the
@@ -96,7 +95,7 @@ real, model-free divergence: Polymarket prices underdogs *lower* than DraftKings
 that meant Polymarket was soft (the thesis) or DraftKings was biased (textbook) needed a
 **true sharp** to settle.
 
-**Pinnacle settles it** — direct "to qualify from group" prices, the five divergent
+**Pinnacle settles it** - direct "to qualify from group" prices, the five divergent
 underdogs (P(advance to R32), %):
 
 | Team | Internal model | Polymarket | DraftKings (rec.) | **Pinnacle (sharp)** |
@@ -109,20 +108,20 @@ underdogs (P(advance to R32), %):
 | **mean \|venue − Pinnacle\|** | 4.0pp | **1.6pp** | 7.7pp | — |
 
 Pinnacle lands on top of Polymarket (Saudi Arabia differs by **0.6pp**) and ~8pp from
-DraftKings. An independent proxy via Pinnacle's "reach the Round of 16" market — inverting
-`P(reach R16) / P(advance)` to an implied single-knockout win rate — gave the same answer
+DraftKings. An independent proxy via Pinnacle's "reach the Round of 16" market, inverting
+`P(reach R16) / P(advance)` to an implied single-knockout win rate, gave the same answer
 (a realistic, tight 29.5 ± 2.9% under Polymarket's numbers vs an implausible 23.7 ± 4.2%
 under DraftKings').
 
 ## Conclusion
 
 - **No edge.** Polymarket's advance-to-knockout market is at sharp (Pinnacle) value.
-- **DraftKings is the biased venue**, over-pricing underdogs — the classic recreational
+- **DraftKings is the biased venue**, over-pricing underdogs - the classic recreational
   **favourite-longshot bias**, exactly as theory predicts.
 - **The thesis is not supported** for liquid aggregate markets: simple
   dependent-probability propagation cannot beat a market that arbitrageurs already police.
 - **Methodological takeaway** (the durable lesson): *a model calibrated **from** a market
-  cannot detect edges **against** it* — it only re-expresses that market's view. Real edge
+  cannot detect edges **against** it* - it only re-expresses that market's view. Real edge
   detection requires an independent second price, and "fair" must be anchored to a true
   sharp, never a recreational book.
 
@@ -150,20 +149,15 @@ python make_figure.py                     # regenerate assets/results.png
 
 Live runs hit the Polymarket Gamma API (no key needed); numbers shift slightly as the
 market moves. The DraftKings and Pinnacle prices are pre-tournament (June 2026) snapshots
-hard-coded in `sharp_compare.py` — true-sharp "to qualify" prices are not freely scrapable
+hard-coded in `sharp_compare.py` - true-sharp "to qualify" prices are not freely scrapable
 and were read manually off a Pinnacle account.
 
 ## Limitations
 
 - Assumes a team's three group games are **independent** (no tournament-form correlation)
-  and ignores **dead-rubber rotation** in the final group game — the two effects most
+  and ignores **dead-rubber rotation** in the final group game - the two effects most
   likely behind any residual favourite tilt.
 - The `wc2026_model.py` knockout bracket is **randomised**, not the official R32
   third-place map; treat its win-cup numbers as illustrative only.
 - All odds are **pre-tournament snapshots**; this is research tooling, not a live trading
   system.
-
-## Disclaimer
-
-Research and educational tooling only — **not financial advice**. No bets were placed on
-the basis of this analysis.
