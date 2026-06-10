@@ -134,6 +134,7 @@ under DraftKings').
 | `sharp_compare.py` | **Cross-venue validation.** Model vs Polymarket vs DraftKings (3-way) and the Pinnacle sharp tie-breaker (`--pinnacle`). The decisive result. |
 | `polymarket_wc.py` | Polymarket Gamma API client + low-level fetchers + a single-group (Group I) worked demo. |
 | `wc2026_model.py` | Standalone reference simulator driven by hand-set team ratings (placeholder strengths, randomised bracket) — the exploratory engine, not the calibrated result. |
+| `vm_profeten.py` | Spin-off: turns the same per-match joint score distribution into expected-points-optimal exact-score predictions for a fantasy/prediction game (`2·P(outcome) + 3·P(exact)`). |
 | `make_figure.py` | Renders `assets/results.png` from the captured result snapshot. |
 
 ## How to run

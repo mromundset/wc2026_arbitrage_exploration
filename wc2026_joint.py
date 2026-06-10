@@ -58,8 +58,10 @@ def fetch_games_full():
                 if not pr: continue
                 y=float(json.loads(pr)[0]); q=m.get("question","")
                 mm=re.match(r"Will (.+?) win on",q)
-                if mm and mm.group(1).strip()==h: ph=y
-                elif mm and mm.group(1).strip()==a: pa=y
+                if mm:                                   # canon both sides: Polymarket
+                    nm=canon(mm.group(1).strip())        # spells some names differently
+                    if nm==canon(h): ph=y                # in the question vs the title
+                    elif nm==canon(a): pa=y              # (e.g. Bosnia and/-Herzegovina)
                 elif "end in a draw" in q: pd=y
             if None in (ph,pd,pa): continue
             dv=devig({"h":ph,"d":pd,"a":pa})
